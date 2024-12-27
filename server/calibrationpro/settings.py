@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'calibration_api'
+    'calibration_api',
+    'debug_toolbar',
+    'rest_framework',
+    'django_extensions'
+
 ]
 
 MIDDLEWARE = [
@@ -48,6 +53,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+
 ]
 
 ROOT_URLCONF = 'calibrationpro.urls'
@@ -74,13 +82,17 @@ WSGI_APPLICATION = 'calibrationpro.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# Database configuration using environment variables
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  # Database engine
+        'NAME': config('DB_NAME'),            # Database name
+        'USER': config('DB_USER'),            # Database user
+        'PASSWORD': config('DB_PASSWORD'),    # Database password
+        'HOST': config('DB_HOST', default='127.0.0.1'),  # Database host
+        'PORT': config('DB_PORT', default='3306'),       # Database port
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
